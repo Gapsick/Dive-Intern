@@ -3,6 +3,7 @@ services:
     image: mysql:8.0
     container_name: dive-intern-db
     restart: unless-stopped
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: dive_intern
@@ -38,6 +39,18 @@ services:
         condition: service_healthy
     volumes:
       - ./backend/src:/app/src
+      - ./backend/db:/app/db
+
+  seeder:
+    image: mysql:8.0
+    depends_on:
+      backend:
+        condition: service_started
+    volumes:
+      - ./backend/db/seed:/seed
+    command: >
+      bash -c "sleep 15 &&
+      mysql -h db -u dive -pdive1234 --default-character-set=utf8mb4 dive_intern < /seed/mock_data.sql"
 
   frontend:
     build:
