@@ -68,7 +68,7 @@ INSERT INTO company_tech_stacks (id, company_id, tech_stack_id) VALUES
 (UUID(), 'co-0001-0000-0000-000000000003', 'ts-0001-0000-0000-000000000006');
 
 -- job_postings
-INSERT INTO job_postings (id, company_id, position, description, employment_type, is_remote, salary_min, salary_max, term, start_date, end_date, deadline) VALUES
+INSERT INTO job_postings (id, company_id, position, description, employment_type, is_remote, salary_min, salary_max, term, start_date, end_date, application_deadline) VALUES
 ('jp-0001-0000-0000-000000000001', 'co-0001-0000-0000-000000000001', 'バックエンドエンジニア', 'Go/マイクロサービス開発', 'インターン', true, 250000, 300000, '2024 summer', '2024-07-01', '2024-09-30', '2024-05-31'),
 ('jp-0001-0000-0000-000000000002', 'co-0001-0000-0000-000000000002', 'フロントエンドエンジニア', 'React/TypeScriptでのUI開発', 'インターン', false, 200000, 250000, '2024 summer', '2024-07-15', '2024-09-15', '2024-06-15'),
 ('jp-0001-0000-0000-000000000003', 'co-0001-0000-0000-000000000003', 'フルスタックエンジニア', 'LINEサービスの機能開発', 'インターン', true, 280000, 320000, '2024 winter', '2024-12-01', '2025-02-28', '2024-10-31');
@@ -119,10 +119,10 @@ INSERT INTO interviewers (id, interview_detail_id, role, count, memo) VALUES
 ('iv-0001-0000-0000-000000000002', 'id-0001-0000-0000-000000000001', '人事', 1, NULL);
 
 -- interviewer_qna
-INSERT INTO interviewer_qna (id, interviewer_id, question, answer, reverse_question, reverse_question_answer) VALUES
-(UUID(), 'iv-0001-0000-0000-000000000001', 'Goを選んだ理由は？', 'パフォーマンスと並行処理の学習のためです。', 'チームの技術スタックはどうなっていますか？', 'Go・Kubernetes・GCPがメインです。'),
-(UUID(), 'iv-0001-0000-0000-000000000001', 'マイクロサービスの経験は？', '個人プロジェクトで小規模に試しました。', NULL, NULL),
-(UUID(), 'iv-0001-0000-0000-000000000002', '志望理由を教えてください。', 'メルカリのエンジニア文化に共感しています。', 'インターン後の正社員登用はありますか？', '実績次第で検討できます。');
+INSERT INTO interviewer_qna (id, interviewer_id, order_index, question, answer, reverse_question) VALUES
+(UUID(), 'iv-0001-0000-0000-000000000001', 1, 'Goを選んだ理由は？', 'パフォーマンスと並行処理の学習のためです。', 'チームの技術スタックはどうなっていますか？'),
+(UUID(), 'iv-0001-0000-0000-000000000001', 2, 'マイクロサービスの経験は？', '個人プロジェクトで小規模に試しました。', NULL),
+(UUID(), 'iv-0001-0000-0000-000000000002', 1, '志望理由を教えてください。', 'メルカリのエンジニア文化に共感しています。', 'インターン後の正社員登用はありますか？');
 
 -- spi_details
 INSERT INTO spi_details (id, selection_process_id, platform, duration_minutes, memo) VALUES
