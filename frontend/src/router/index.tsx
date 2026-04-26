@@ -1,7 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
 import Layout from '../layouts/Layout'
-import HomePage from '../pages/HomePage'
-import AboutPage from '../pages/AboutPage'
+import HomePage from '../pages/Home/HomePage'
+import CompaniesPage from '../pages/Companies/CompaniesPage'
+import SchedulesPage from '../pages/Schedules/SchedulesPage'
+import SelectionsPage from '../pages/Selections/SelectionsPage'
+import CommunityPage from '../pages/Community/CommunityPage'
 
 export const router = createBrowserRouter([
   {
@@ -13,8 +16,20 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: 'about',
-        element: <AboutPage />,
+        path: 'companies',
+        element: <CompaniesPage />,
+      },
+      {
+        path: 'schedules',
+        element: <SchedulesPage />,
+      },
+      {
+        path: 'selections',
+        element: <SelectionsPage />,
+      },
+      {
+        path: 'community',
+        element: <CommunityPage />,
       },
     ],
   },

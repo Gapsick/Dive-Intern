@@ -10,8 +10,23 @@ function Sidebar() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-            About
+          <NavLink to="/companies" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            Companies
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/schedules" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            Schedules
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/selections" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            Selections
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/community" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            Community
           </NavLink>
         </li>
       </ul>
