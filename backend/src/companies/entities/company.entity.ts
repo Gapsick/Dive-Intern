@@ -1,18 +1,13 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { CompanyTranslation } from './company-translation.entity';
 
 @Entity('companies')
 export class Company {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false })
-  name: string;
-
   @Column({ nullable: true })
   industry: string;
-
-  @Column({ nullable: true })
-  description: string;
 
   @Column({ nullable: true })
   region: string;
@@ -23,8 +18,8 @@ export class Company {
   @Column({ nullable: true })
   logo_url: string;
 
-  @Column({ type: 'text', nullable: true })
-  mvv: string;
+  @OneToMany(() => CompanyTranslation, (translation) => translation.company)
+  translations: CompanyTranslation[];
 
   @CreateDateColumn()
   created_at: Date;
