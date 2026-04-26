@@ -2,6 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { CompaniesModule } from './companies/companies.module';
+import { SchedulesModule } from './schedules/schedules.module';
+import { SelectionProcessesModule } from './selection-processes/selection-processes.module';
+import { CommunityModule } from './community/community.module';
+import { UsersModule } from './users/users.module';
+import { GithubModule } from './github/github.module';
+import { TechStacksModule } from './tech-stacks/tech-stacks.module';
+import { UserCompaniesModule } from './user-companies/user-companies.module';
 
 @Module({
   imports: [
@@ -14,7 +22,16 @@ import { AppService } from './app.service';
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      charset: 'utf8mb4_unicode_ci',
     }),
+    CompaniesModule,
+    SchedulesModule,
+    SelectionProcessesModule,
+    CommunityModule,
+    UsersModule,
+    GithubModule,
+    TechStacksModule,
+    UserCompaniesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
