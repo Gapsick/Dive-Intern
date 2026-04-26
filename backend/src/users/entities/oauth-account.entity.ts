@@ -16,8 +16,8 @@ export class OauthAccount {
   @Column({ nullable: false })
   provider_account_id: string;
 
-  @Column({ nullable: true })
-  refresh_token: string;
+  @Column({ type: 'varchar', nullable: true })
+  refresh_token: string | null;
 
   @Column({ type: 'timestamp', nullable: true })
   token_expires_at: Date;
