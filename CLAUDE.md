@@ -839,6 +839,13 @@ Backend lint 설정상 `any`가 허용될 수 있습니다.
   - `useAppDispatch`
   - `useAppSelector`
 
+### UI / 스타일 규칙
+
+- 이모티콘(emoji)을 UI에 사용하지 않습니다. (예: 🌟 📅 ⏰ 등 일체 금지)
+- 아이콘이 필요한 경우 `@mui/icons-material`의 MUI Icon component를 사용합니다.
+- 스타일링은 가능한 한 MUI(`@mui/material`)의 컴포넌트와 `sx` prop을 사용합니다.
+- 인라인 style 객체(`style={{...}}`)보다 MUI `sx` prop을 우선합니다.
+
 Frontend lint 규칙:
 
 ```text
