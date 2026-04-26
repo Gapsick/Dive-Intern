@@ -62,11 +62,22 @@ INSERT INTO user_tech_stack_repos (id, user_tech_stack_id, repo_id) VALUES
 (UUID(), 'uts-001-0000-0000-000000000010', 'rp-0001-0000-0000-000000000005');
 
 -- companies
-INSERT INTO companies (id, name, industry, description, region, hp_url, logo_url, mvv) VALUES
-('co-0001-0000-0000-000000000001', 'メルカリ', 'EC', 'フリマアプリNo.1', '東京', 'https://mercari.com', NULL, 'あらゆる価値を循環させる'),
-('co-0001-0000-0000-000000000002', 'サイバーエージェント', 'IT', 'インターネットの総合企業', '東京', 'https://cyberagent.co.jp', NULL, '21世紀を代表する会社を創る'),
-('co-0001-0000-0000-000000000003', 'LINE', 'IT', 'コミュニケーションアプリLINE', '東京', 'https://linecorp.com', NULL, 'WOW'),
-('co-0001-0000-0000-000000000004', '楽天', 'IT', '日本最大級のEC/プラットフォーム企業', '東京', 'https://rakuten.co.jp', NULL, 'イノベーションの力で人々と社会をエンパワーメントする');
+INSERT INTO companies (id, industry, region, hp_url, logo_url) VALUES
+('co-0001-0000-0000-000000000001', 'EC', '東京', 'https://mercari.com', NULL),
+('co-0001-0000-0000-000000000002', 'IT', '東京', 'https://cyberagent.co.jp', NULL),
+('co-0001-0000-0000-000000000003', 'IT', '東京', 'https://linecorp.com', NULL),
+('co-0001-0000-0000-000000000004', 'IT', '東京', 'https://rakuten.co.jp', NULL);
+
+-- company_translations
+INSERT INTO company_translations (id, company_id, lang, name, description, mvv) VALUES
+(UUID(), 'co-0001-0000-0000-000000000001', 'ja', 'メルカリ', 'フリマアプリNo.1', 'あらゆる価値を循環させる'),
+(UUID(), 'co-0001-0000-0000-000000000001', 'ko', '메루카리', '중고거래 앱 1위', '모든 가치를 순환시키다'),
+(UUID(), 'co-0001-0000-0000-000000000002', 'ja', 'サイバーエージェント', 'インターネットの総合企業', '21世紀を代表する会社を創る'),
+(UUID(), 'co-0001-0000-0000-000000000002', 'ko', '사이버에이전트', '인터넷 종합 기업', '21세기를 대표하는 회사를 만들다'),
+(UUID(), 'co-0001-0000-0000-000000000003', 'ja', 'LINE', 'コミュニケーションアプリLINE', 'WOW'),
+(UUID(), 'co-0001-0000-0000-000000000003', 'ko', 'LINE', '커뮤니케이션 앱 LINE', 'WOW'),
+(UUID(), 'co-0001-0000-0000-000000000004', 'ja', '楽天', '日本最大級のEC/プラットフォーム企業', 'イノベーションの力で人々と社会をエンパワーメントする'),
+(UUID(), 'co-0001-0000-0000-000000000004', 'ko', '라쿠텐', '일본 최대 규모의 EC/플랫폼 기업', '혁신의 힘으로 사람과 사회를 임파워먼트하다');
 
 -- company_tech_stacks
 INSERT INTO company_tech_stacks (id, company_id, tech_stack_id) VALUES
@@ -79,13 +90,28 @@ INSERT INTO company_tech_stacks (id, company_id, tech_stack_id) VALUES
 (UUID(), 'co-0001-0000-0000-000000000004', 'ts-0001-0000-0000-000000000006');
 
 -- job_postings
-INSERT INTO job_postings (id, company_id, position, description, employment_type, is_remote, salary_min, salary_max, term, start_date, end_date, application_deadline, work_hours, major_requirement, other_requirements, recruit_url) VALUES
-('jp-0001-0000-0000-000000000001', 'co-0001-0000-0000-000000000001', 'バックエンドエンジニア', 'Go/マイクロサービス開発', 'インターン', true, 250000, 300000, '2024 summer', '2024-07-01', '2024-09-30', '2024-05-31', '09:00~18:00', '情報系歓迎', '英語ドキュメント読解力', 'https://mercari.com/recruit/backend'),
-('jp-0002-0000-0000-000000000002', 'co-0001-0000-0000-000000000002', 'フロントエンドエンジニア', 'React/TypeScriptでのUI開発', 'インターン', false, 200000, 250000, '2024 summer', '2024-07-15', '2024-09-15', '2024-06-15', NULL, 'ソフトウェア系優遇', NULL, 'https://cyberagent.co.jp/intern/frontend'),
-('jp-0003-0000-0000-000000000003', 'co-0001-0000-0000-000000000003', 'フルスタックエンジニア', 'LINEサービスの機能開発', 'インターン', true, 280000, 320000, '2024 winter', '2024-12-01', '2025-02-28', '2024-10-31', 'フレックス', NULL, '語学力やコミュニケーション力重視', NULL),
-('jp-0004-0000-0000-000000000004', 'co-0001-0000-0000-000000000002', 'バックエンドエンジニア', '広告プラットフォームのAPI設計', 'インターン', false, 230000, 270000, '2024 summer', '2024-07-01', '2024-09-30', '2024-06-10', '10:00~19:00', 'Linux基礎', 'サービス開発経験歓迎', 'https://cyberagent.co.jp/intern/backend'),
-('jp-0005-0000-0000-000000000005', 'co-0001-0000-0000-000000000003', 'データエンジニア', 'ログ分析とデータパイプライン構築', 'インターン', true, 260000, 300000, '2024 summer', '2024-08-01', '2024-10-31', '2024-06-30', NULL, '統計・データ分析の基礎', NULL, 'https://linecorp.com/recruit/data-engineer'),
-('jp-0006-0000-0000-000000000006', 'co-0001-0000-0000-000000000004', 'クラウドエンジニア', 'クラウド基盤の運用自動化', 'インターン', true, 240000, 290000, '2024 summer', '2024-07-10', '2024-09-25', '2024-06-25', 'フレックス', NULL, 'AWS資格者優遇', 'https://rakuten.co.jp/recruit/cloud');
+INSERT INTO job_postings (id, company_id, employment_type, is_remote, salary_min, salary_max, term, start_date, end_date, application_deadline, work_hours, recruit_url) VALUES
+('jp-0001-0000-0000-000000000001', 'co-0001-0000-0000-000000000001', 'インターン', true, 250000, 300000, '2024 summer', '2024-07-01', '2024-09-30', '2024-05-31', '09:00~18:00', 'https://mercari.com/recruit/backend'),
+('jp-0002-0000-0000-000000000002', 'co-0001-0000-0000-000000000002', 'インターン', false, 200000, 250000, '2024 summer', '2024-07-15', '2024-09-15', '2024-06-15', NULL, 'https://cyberagent.co.jp/intern/frontend'),
+('jp-0003-0000-0000-000000000003', 'co-0001-0000-0000-000000000003', 'インターン', true, 280000, 320000, '2024 winter', '2024-12-01', '2025-02-28', '2024-10-31', 'フレックス', NULL),
+('jp-0004-0000-0000-000000000004', 'co-0001-0000-0000-000000000002', 'インターン', false, 230000, 270000, '2024 summer', '2024-07-01', '2024-09-30', '2024-06-10', '10:00~19:00', 'https://cyberagent.co.jp/intern/backend'),
+('jp-0005-0000-0000-000000000005', 'co-0001-0000-0000-000000000003', 'インターン', true, 260000, 300000, '2024 summer', '2024-08-01', '2024-10-31', '2024-06-30', NULL, 'https://linecorp.com/recruit/data-engineer'),
+('jp-0006-0000-0000-000000000006', 'co-0001-0000-0000-000000000004', 'インターン', true, 240000, 290000, '2024 summer', '2024-07-10', '2024-09-25', '2024-06-25', 'フレックス', 'https://rakuten.co.jp/recruit/cloud');
+
+-- job_posting_translations
+INSERT INTO job_posting_translations (id, job_posting_id, lang, position, description, major_requirement, other_requirements) VALUES
+(UUID(), 'jp-0001-0000-0000-000000000001', 'ja', 'バックエンドエンジニア', 'Go/マイクロサービス開発', '情報系歓迎', '英語ドキュメント読解力'),
+(UUID(), 'jp-0001-0000-0000-000000000001', 'ko', '백엔드 엔지니어', 'Go/마이크로서비스 개발', '정보계열 환영', '영어 문서 독해 능력'),
+(UUID(), 'jp-0002-0000-0000-000000000002', 'ja', 'フロントエンドエンジニア', 'React/TypeScriptでのUI開発', 'ソフトウェア系優遇', NULL),
+(UUID(), 'jp-0002-0000-0000-000000000002', 'ko', '프론트엔드 엔지니어', 'React/TypeScript UI 개발', '소프트웨어 계열 우대', NULL),
+(UUID(), 'jp-0003-0000-0000-000000000003', 'ja', 'フルスタックエンジニア', 'LINEサービスの機能開発', NULL, '語学力やコミュニケーション力重視'),
+(UUID(), 'jp-0003-0000-0000-000000000003', 'ko', '풀스택 엔지니어', 'LINE 서비스 기능 개발', NULL, '어학력 및 커뮤니케이션 능력 중시'),
+(UUID(), 'jp-0004-0000-0000-000000000004', 'ja', 'バックエンドエンジニア', '広告プラットフォームのAPI設計', 'Linux基礎', 'サービス開発経験歓迎'),
+(UUID(), 'jp-0004-0000-0000-000000000004', 'ko', '백엔드 엔지니어', '광고 플랫폼 API 설계', 'Linux 기초', '서비스 개발 경험 환영'),
+(UUID(), 'jp-0005-0000-0000-000000000005', 'ja', 'データエンジニア', 'ログ分析とデータパイプライン構築', '統計・データ分析の基礎', NULL),
+(UUID(), 'jp-0005-0000-0000-000000000005', 'ko', '데이터 엔지니어', '로그 분석 및 데이터 파이프라인 구축', '통계·데이터 분석 기초', NULL),
+(UUID(), 'jp-0006-0000-0000-000000000006', 'ja', 'クラウドエンジニア', 'クラウド基盤の運用自動化', NULL, 'AWS資格者優遇'),
+(UUID(), 'jp-0006-0000-0000-000000000006', 'ko', '클라우드 엔지니어', '클라우드 기반 운용 자동화', NULL, 'AWS 자격증 보유자 우대');
 
 -- user_companies
 INSERT INTO user_companies (id, student_id, job_posting_id, status, is_bookmarked, is_applying, saved_at) VALUES

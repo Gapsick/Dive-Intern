@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Company } from './company.entity';
+import { JobPostingTranslation } from './job-posting-translation.entity';
 
 @Entity('job_postings')
 export class JobPosting {
@@ -11,12 +12,6 @@ export class JobPosting {
   company: Company;
 
   @Column({ nullable: true })
-  position: string;
-
-  @Column({ nullable: true })
-  description: string;
-
-  @Column({ nullable: true })
   employment_type: string;
 
   @Column({ nullable: true })
@@ -24,12 +19,6 @@ export class JobPosting {
 
   @Column({ default: false })
   is_remote: boolean;
-
-  @Column({ nullable: true })
-  major_requirement: string;
-
-  @Column({ nullable: true })
-  other_requirements: string;
 
   @Column({ type: 'int', nullable: true })
   salary_min: number;
@@ -51,6 +40,9 @@ export class JobPosting {
 
   @Column({ type: 'date', nullable: true })
   application_deadline: Date;
+
+  @OneToMany(() => JobPostingTranslation, (translation) => translation.job_posting)
+  translations: JobPostingTranslation[];
 
   @CreateDateColumn()
   created_at: Date;

@@ -14,14 +14,14 @@ export class CompaniesService {
     private readonly companyRepository: Repository<Company>,
   ) {}
 
-  // SELECT * FROM companies
+  // SELECT * FROM companies + translations
   findAll() {
-    return this.companyRepository.find();
+    return this.companyRepository.find({ relations: ['translations'] });
   }
 
-  // SELECT * FROM companies WHERE id = ?
+  // SELECT * FROM companies WHERE id = ? + translations
   findOne(id: string) {
-    return this.companyRepository.findOne({ where: { id } });
+    return this.companyRepository.findOne({ where: { id }, relations: ['translations'] });
   }
 
   // INSERT INTO companies ...
