@@ -1,5 +1,19 @@
 import api from './apiClient';
 
+// GET /companies 응답 타입 (flat 구조)
+export interface CompanyListItem {
+  id: string;
+  name_ja: string | null;
+  name_ko: string | null;
+  industry: string | null;
+  region: string | null;
+  logo_url: string | null;
+  description_ja: string | null;
+  description_ko: string | null;
+  tech_stacks: string[];
+  application_deadline: string[];
+}
+
 export interface Company {
   id: string;
   name: string;
@@ -43,7 +57,7 @@ type UpdateJobPostingBody = Partial<Omit<JobPosting, 'id' | 'company' | 'created
 export const companiesApi = {
   // Company
   getAll: () =>
-    api.get<Company[]>('/companies'),
+    api.get<CompanyListItem[]>('/companies'),
 
   getById: (id: string) =>
     api.get<Company>(`/companies/${id}`),
