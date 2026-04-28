@@ -17,4 +17,25 @@ export class UserCompaniesService {
   findOne(id: string) {
     return this.userCompanyRepository.findOne({ where: { id } });
   }
+
+  async getSummary(studentId: string): Promise<{ total: number; byStatus: Record<string, number> }> {
+    const rows = await this.userCompanyRepository
+      .createQueryBuilder('uc')
+      .select('uc.status', 'status')
+      .addSelect('COUNT(*)', 'count')
+      .where('uc.student_id = :studentId', { studentId })
+      .groupBy('uc.status')
+      .getRawMany();
+
+    const byStatus: Record<string, number> = {};
+    let total = 0;
+
+    for (const row of rows) {
+      const count = Number(row.count);
+      byStatus[row.status ?? 'その他'] = count;
+      total += count;
+    }
+
+    return { total, byStatus };
+  }
 }
