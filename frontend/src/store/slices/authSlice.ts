@@ -11,9 +11,14 @@ interface AuthState {
   isKo: boolean;
 }
 
+const mockUser: User = {
+  studentId: '2021001',
+  name: '田中太郎',
+};
+
 const initialState: AuthState = {
-  isLoggedIn: false,
-  user: null,
+  isLoggedIn: true,
+  user: mockUser,
   isKo: true,
 };
 

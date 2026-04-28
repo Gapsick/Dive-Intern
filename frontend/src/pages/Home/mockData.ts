@@ -1,5 +1,6 @@
 // mock_data.sql 기반 홈 페이지용 mock 데이터
 import type { CompanyListItem } from '@/api/companies';
+import type { UpcomingScheduleItem } from '@/api/schedules';
 
 export type ApplicationStatus =
   | '서류준비'
@@ -14,17 +15,6 @@ export interface ApplicationStatusSummary {
 }
 
 export type RecommendedCompany = CompanyListItem;
-
-export interface UpcomingSchedule {
-  id: string;
-  companyName: string;
-  title: string;
-  scheduleType: string;
-  date: string;
-  time: string;
-  locationType: string;
-  dDay: number;
-}
 
 // 지원현황 mock 데이터
 export const mockApplicationStatus: ApplicationStatusSummary = {
@@ -90,76 +80,22 @@ export const mockRecommendedCompanies: RecommendedCompany[] = [
   },
 ];
 
-// 다가오는 일정 mock 데이터 (schedules 기반)
-export const mockUpcomingSchedules: UpcomingSchedule[] = [
+// 다가오는 일정 mock 데이터 (API 응답 형식에 맞춤)
+export const mockUpcomingSchedules: UpcomingScheduleItem[] = [
   {
-    id: 'sch-001',
-    companyName: 'Mercari',
-    title: 'Mercari 1차 면접',
-    scheduleType: '면접',
-    date: '04/15',
-    time: '14:00',
-    locationType: '화상면접',
-    dDay: -2,
+    id: 'b138a8e5-418b-11f1-bc2e-c65ff86e27c9',
+    title: 'メルカリ 一次面接',
+    schedule_type: '面接',
+    start_at: '2024-05-20T10:00:00.000Z',
+    end_at: '2024-05-20T11:00:00.000Z',
+    user_company_id: 'uc-0001-0000-0000-000000000001',
   },
   {
-    id: 'sch-002',
-    companyName: 'Mercari',
-    title: 'Mercari 서류 마감',
-    scheduleType: '서류마감',
-    date: '04/16',
-    time: '23:59',
-    locationType: '',
-    dDay: -3,
-  },
-  {
-    id: 'sch-003',
-    companyName: 'Colopl',
-    title: 'Colopl 1차 면접',
-    scheduleType: '면접',
-    date: '04/17',
-    time: '13:00',
-    locationType: '대면',
-    dDay: -4,
-  },
-  {
-    id: 'sch-004',
-    companyName: 'SmartHR',
-    title: 'SmartHR 2차 면접',
-    scheduleType: '면접',
-    date: '04/20',
-    time: '15:00',
-    locationType: '화상면접',
-    dDay: -7,
-  },
-  {
-    id: 'sch-005',
-    companyName: 'Recruit',
-    title: 'Recruit 회사설명회',
-    scheduleType: '설명회',
-    date: '04/22',
-    time: '10:00',
-    locationType: '대면',
-    dDay: -9,
-  },
-  {
-    id: 'sch-006',
-    companyName: 'Cyberagent',
-    title: 'Cyberagent 서류 마감',
-    scheduleType: '서류마감',
-    date: '04/23',
-    time: '23:59',
-    locationType: '',
-    dDay: -10,
-  },
-  {
-    id: 'sch-007',
-    companyName: 'LINE',
-    title: 'LINE 코딩테스트',
-    scheduleType: '코딩테스트',
-    date: '04/25',
-    time: '13:00',
-    locationType: '온라인',
-    dDay: -12,
+    id: 'b138b008-418b-11f1-bc2e-c65ff86e27c9',
+    title: 'サイバーエージェント 書類締切',
+    schedule_type: '書類締切',
+    start_at: '2024-06-15T23:59:00.000Z',
+    end_at: null,
+    user_company_id: 'uc-0001-0000-0000-000000000002',
   },
 ];

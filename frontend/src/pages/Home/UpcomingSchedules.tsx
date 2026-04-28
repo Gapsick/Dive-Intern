@@ -1,24 +1,24 @@
 import { Box, Typography, Button } from '@mui/material';
 import EventIcon from '@mui/icons-material/Event';
 import { useNavigate } from 'react-router-dom';
-import type { UpcomingSchedule } from './mockData';
+import type { UpcomingScheduleItem } from '@/api/schedules';
 
 interface Props {
-  schedules: UpcomingSchedule[];
+  schedules: UpcomingScheduleItem[];
   isLogin: boolean;
 }
 
 const SCHEDULE_TYPE_COLORS: Record<string, { bg: string; text: string }> = {
-  면접: { bg: '#fff0eb', text: '#d97b4e' },
-  서류마감: { bg: '#fff0f0', text: '#cc4444' },
-  코딩테스트: { bg: '#f0eeff', text: '#7b5dd9' },
-  SPI: { bg: '#eef5ff', text: '#4477cc' },
-  설명회: { bg: '#eefff0', text: '#44aa66' },
-  기타: { bg: '#f5f5f5', text: '#666' },
+  '面接': { bg: '#fff0eb', text: '#d97b4e' },
+  '書類締切': { bg: '#fff0f0', text: '#cc4444' },
+  'コーディングテスト': { bg: '#f0eeff', text: '#7b5dd9' },
+  'SPI': { bg: '#eef5ff', text: '#4477cc' },
+  '説明会': { bg: '#eefff0', text: '#44aa66' },
+  'その他': { bg: '#f5f5f5', text: '#666' },
 };
 
 function ScheduleTypeBadge({ type }: { type: string }) {
-  const colors = SCHEDULE_TYPE_COLORS[type] ?? SCHEDULE_TYPE_COLORS['기타'];
+  const colors = SCHEDULE_TYPE_COLORS[type] ?? SCHEDULE_TYPE_COLORS['その他'];
   return (
     <Box
       component="span"
@@ -67,10 +67,21 @@ function UpcomingSchedules({ schedules, isLogin }: Props) {
         )}
       </Box>
 
-      {isLogin ? (
+      {isLogin && schedules.length > 0 ? (
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         {schedules.map((schedule, index) => {
-          const [month, day] = schedule.date.split('/');
+          // timezone 고려해서 날짜 계산
+          const [datePart, timePart] = schedule.start_at.split('T');
+          const [, month, day] = datePart.split('-');
+          const time = timePart.substring(0, 5);
+
+          const now = new Date();
+          const todayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+          const scheduleUTC = new Date(datePart + 'T00:00:00.000Z').getTime();
+          const diffDays = Math.round((scheduleUTC - todayUTC) / (1000 * 60 * 60 * 24));
+
+          const scheduleType = schedule.schedule_type ?? 'その他';
+
           return (
             <Box
               key={schedule.id}
@@ -104,11 +115,11 @@ function UpcomingSchedules({ schedules, isLogin }: Props) {
                   {schedule.title}
                 </Typography>
                 <Typography sx={{ fontSize: '0.78rem', color: '#888' }}>
-                  {schedule.time}{schedule.locationType ? ` · ${schedule.locationType}` : ''}
+                  {time}
                 </Typography>
               </Box>
 
-              <ScheduleTypeBadge type={schedule.scheduleType} />
+              <ScheduleTypeBadge type={scheduleType} />
 
               <Typography
                 sx={{
@@ -119,7 +130,7 @@ function UpcomingSchedules({ schedules, isLogin }: Props) {
                   textAlign: 'right',
                 }}
               >
-                D{schedule.dDay}
+                D-{diffDays}
               </Typography>
             </Box>
           );
@@ -127,7 +138,7 @@ function UpcomingSchedules({ schedules, isLogin }: Props) {
       </Box>
       ) : (
         <Typography sx={{ fontSize: '0.9rem', color: '#555', textAlign: 'center', py: 4 }}>
-          로그인 후 다가오는 일정을 확인할 수 있습니다.
+          {isLogin ? '다음 일정이 없습니다.' : '로그인 후 다가오는 일정을 확인할 수 있습니다.'}
         </Typography>
       )}
     </Box>
