@@ -26,7 +26,7 @@ export class CompaniesService {
         region: true,
         logo_url: true,
         translations: { lang: true, name: true, description: true },
-        techStacks: { tech_stack: { name: true } },
+        techStacks: { id: true, tech_stack: { id: true, name: true } },
         jobPostings: { application_deadline: true },
       },
       relations: ['translations', 'techStacks', 'techStacks.tech_stack', 'jobPostings'],
