@@ -8,11 +8,13 @@ interface User {
 interface AuthState {
   isLoggedIn: boolean;
   user: User | null;
+  isKo: boolean;
 }
 
 const initialState: AuthState = {
   isLoggedIn: false,
   user: null,
+  isKo: true,
 };
 
 export const authSlice = createSlice({
@@ -27,8 +29,11 @@ export const authSlice = createSlice({
       state.isLoggedIn = false;
       state.user = null;
     },
+    toggleLanguage: (state) => {
+      state.isKo = !state.isKo;
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, toggleLanguage } = authSlice.actions;
 export default authSlice.reducer;
