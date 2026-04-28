@@ -1,18 +1,7 @@
 // mock_data.sql 기반 홈 페이지용 mock 데이터
 import type { CompanyListItem } from '@/api/companies';
 import type { UpcomingScheduleItem } from '@/api/schedules';
-
-export type ApplicationStatus =
-  | '서류준비'
-  | '지원완료'
-  | '면접'
-  | '합격'
-  | '불합격';
-
-export interface ApplicationStatusSummary {
-  total: number;
-  byStatus: Record<ApplicationStatus, number>;
-}
+import type { ApplicationStatusSummary } from '@/api/userCompanies';
 
 export type RecommendedCompany = CompanyListItem;
 

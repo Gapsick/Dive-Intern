@@ -1,23 +1,33 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import type { ApplicationStatusSummary, ApplicationStatus } from './mockData';
+import type { ApplicationStatusSummary } from '@/api/userCompanies';
 
 interface Props {
   data: ApplicationStatusSummary;
   isLogin: boolean;
+  loading?: boolean;
 }
 
-const STATUS_COLORS: Record<ApplicationStatus, string> = {
-  서류준비: '#b8a585',
-  지원완료: '#5b8dd9',
-  면접: '#d97b4e',
-  합격: '#4a9e6b',
-  불합격: '#8c8c8c',
-};
+// 지원 상태별 색상 및 라벨 설정
+const STATUS_CONFIG: { keys: string[]; label: string; color: string }[] = [
+  { keys: ['서류준비', '書類'],  label: '서류', color: '#b8a585' },
+  { keys: ['지원완료'],             label: '지원완료', color: '#5b8dd9' },
+  { keys: ['SPI'],                  label: 'SPI',     color: '#7c6fb0' },
+  { keys: ['면접', '面接'],         label: '면접',    color: '#d97b4e' },
+  { keys: ['합격', '合格'],         label: '합격',    color: '#4a9e6b' },
+  { keys: ['불합격', '不合格'],     label: '불합격',  color: '#8c8c8c' },
+];
 
-function ApplicationStatus({ data, isLogin }: Props) {
+function ApplicationStatus({ data, isLogin, loading }: Props) {
   const navigate = useNavigate();
-  const statuses = Object.keys(data.byStatus) as ApplicationStatus[];
+
+  // 상태별 지원 건수 계산 후, 0건인 상태는 제외
+  const activeStatuses = STATUS_CONFIG
+    .map((config) => ({
+      ...config,
+      count: config.keys.reduce((sum, k) => sum + (data.byStatus[k] ?? 0), 0),
+    }))
+    .filter(({ count }) => count > 0);
 
   return (
     <Box
@@ -52,47 +62,48 @@ function ApplicationStatus({ data, isLogin }: Props) {
       </Box>
 
       {/* 진행 바 */}
-      {isLogin && data ? (
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+          <CircularProgress size={24} />
+        </Box>
+      ) : isLogin && activeStatuses.length > 0 ? (
         <>
-        <Box sx={{ display: 'flex', height: '12px', borderRadius: '6px', overflow: 'hidden', mb: 1.5 }}>
-          {statuses.map((status) => (
-            <Box
-              key={status}
-              sx={{
-                flex: data.byStatus[status],
-              background: STATUS_COLORS[status],
-            }}
-          />
-          ))}
-        </Box>
-
-        {/* 범례 */}
-        <Box sx={{ display: 'flex', gap: 2.4, flexWrap: 'wrap' }}>
-          {statuses.map((status) => (
-            <Box key={status} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <Box sx={{ display: 'flex', height: '12px', borderRadius: '6px', overflow: 'hidden', mb: 1.5 }}>
+            {activeStatuses.map(({ label, color, count }) => (
               <Box
-                component="span"
-                sx={{
-                  width: '10px',
-                  height: '10px',
-                  borderRadius: '50%',
-                  background: STATUS_COLORS[status],
-                  display: 'inline-block',
-                }}
+                key={label}
+                sx={{ flex: count, background: color }}
               />
-              <Typography component="span" sx={{ fontSize: '0.85rem', color: '#555' }}>
-                {status}
-              </Typography>
-              <Typography component="span" sx={{ fontSize: '0.85rem', fontWeight: 700, color: '#555' }}>
-                {data.byStatus[status]}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
+            ))}
+          </Box>
+
+          {/* 범례 */}
+          <Box sx={{ display: 'flex', gap: 2.4, flexWrap: 'wrap' }}>
+            {activeStatuses.map(({ label, color, count }) => (
+              <Box key={label} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                <Box
+                  component="span"
+                  sx={{
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    background: color,
+                    display: 'inline-block',
+                  }}
+                />
+                <Typography component="span" sx={{ fontSize: '0.85rem', color: '#555' }}>
+                  {label}
+                </Typography>
+                <Typography component="span" sx={{ fontSize: '0.85rem', fontWeight: 700, color: '#555' }}>
+                  {count}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
         </>
-        ) : (
+      ) : (
         <Typography sx={{ fontSize: '0.9rem', color: '#555', textAlign: 'center', py: 4 }}>
-          로그인 후 지원 현황을 확인할 수 있습니다.
+          {isLogin ? '지원 현황이 없습니다.' : '로그인 후 지원 현황을 확인할 수 있습니다.'}
         </Typography>
       )}
     </Box>
