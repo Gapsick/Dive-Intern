@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } fro
 
 @Entity('users')
 export class User {
-  @PrimaryColumn({ type: 'varchar', length: 20 })
+  @PrimaryColumn({ type: 'varchar', length: 36 })
   student_id: string;
 
   @Column({ nullable: false })

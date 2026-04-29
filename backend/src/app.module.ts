@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { GithubModule } from './github/github.module';
 import { TechStacksModule } from './tech-stacks/tech-stacks.module';
 import { UserCompaniesModule } from './user-companies/user-companies.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { UserCompaniesModule } from './user-companies/user-companies.module';
     GithubModule,
     TechStacksModule,
     UserCompaniesModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
