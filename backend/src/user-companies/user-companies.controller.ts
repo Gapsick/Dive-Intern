@@ -15,6 +15,11 @@ export class UserCompaniesController {
     return this.userCompaniesService.getSummary(studentId);
   }
 
+  @Get(':id/detail')
+  getDetail(@Param('id') id: string) {
+    return this.userCompaniesService.getDetail(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userCompaniesService.findOne(id);
