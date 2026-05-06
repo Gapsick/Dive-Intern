@@ -1,6 +1,7 @@
 import { Box, Typography, Chip } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { useNavigate } from 'react-router-dom';
 import type { SelectionItemDto } from '@/api/selections';
 
 interface Props {
@@ -45,6 +46,7 @@ function DDayText({ dDay }: { dDay: number }) {
 }
 
 function SelectionCard({ item, isKo, compact = false }: Props) {
+  const navigate = useNavigate();
   const name = isKo ? (item.name_ko ?? '') : (item.name_ja ?? '');
   const description = isKo ? item.description_ko : item.description_ja;
   const position = isKo ? item.position_ko : item.position_ja;
@@ -57,6 +59,7 @@ function SelectionCard({ item, isKo, compact = false }: Props) {
 
   return (
     <Box
+      onClick={() => navigate(`/selections/${item.id}`)}
       sx={{
         border: '1px solid #e8e0d5',
         borderRadius: '10px',
