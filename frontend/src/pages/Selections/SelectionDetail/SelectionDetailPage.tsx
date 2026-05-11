@@ -6,7 +6,6 @@ import { userCompaniesApi } from '@/api/userCompanies';
 import type { SelectionDetailData } from '@/api/userCompanies';
 import { MOCK_DETAIL } from './mockDetailData';
 import DetailHeaderBar from './components/DetailHeaderBar';
-import CompanyInfoCard from './components/CompanyInfoCard';
 import JobInfoCard from './components/JobInfoCard';
 import MatchScoreCard from './components/MatchScoreCard';
 import TechStackCard from './components/TechStackCard';
@@ -56,40 +55,18 @@ function SelectionDetailPage() {
   }
 
   return (
-    <Box sx={{ maxWidth: '1100px', margin: '0 auto' }}>
+    <Box sx={{ maxWidth: '900px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 1.5 }}>
       <DetailHeaderBar data={data} isKo={isKo} />
-
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 380px',
-          gap: 2.5,
-          mt: 2.5,
-          alignItems: 'start',
-        }}
-      >
-        {/* 왼쪽 열 */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-          <CompanyInfoCard
-            company={data.company}
-            isRemote={data.job_posting.is_remote}
-            workHours={data.job_posting.work_hours}
-            isKo={isKo}
-          />
-          <JobInfoCard jobPosting={data.job_posting} isKo={isKo} />
-          <MatchScoreCard aiAnalysis={data.ai_analysis} isKo={isKo} />
-          <TechStackCard
-            companyTechStacks={data.company.tech_stacks}
-            userTechStacks={data.user_tech_stacks}
-          />
-        </Box>
-
-        {/* 오른쪽 열 */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-          <MemoCard memos={data.memos} />
-          <SelectionStagesCard processes={data.selection_processes} />
-        </Box>
+      <JobInfoCard jobPosting={data.job_posting} isKo={isKo} />
+      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+        <MatchScoreCard aiAnalysis={data.ai_analysis} isKo={isKo} />
+        <TechStackCard
+          companyTechStacks={data.company.tech_stacks}
+          userTechStacks={data.user_tech_stacks}
+        />
       </Box>
+      <SelectionStagesCard processes={data.selection_processes} userCompanyId={id ?? ''} />
+      <MemoCard memos={data.memos} />
     </Box>
   );
 }

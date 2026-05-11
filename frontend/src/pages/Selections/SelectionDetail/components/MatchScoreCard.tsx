@@ -8,13 +8,6 @@ interface Props {
   isKo: boolean;
 }
 
-function getScoreColor(score: number): string {
-  if (score >= 85) return '#4a9e6b';
-  if (score >= 70) return '#5b8dd9';
-  if (score >= 55) return '#d97b4e';
-  return '#e05c5c';
-}
-
 function getScoreRankLabel(score: number): string | null {
   if (score >= 90) return '상위 5% 매칭';
   if (score >= 80) return '상위 20% 매칭';
@@ -28,8 +21,8 @@ function MatchScoreCard({ aiAnalysis, isKo: _isKo }: Props) {
       <Box
         sx={{
           border: '1px solid #e8e0d5',
-          borderRadius: '12px',
-          p: 2.5,
+          borderRadius: '14px',
+          p: '22px 24px',
           bgcolor: '#fff',
         }}
       >
@@ -46,101 +39,120 @@ function MatchScoreCard({ aiAnalysis, isKo: _isKo }: Props) {
 
   const { match_score, match_summary } = aiAnalysis;
   const scoreInt = Math.round(match_score);
-  const scoreColor = getScoreColor(match_score);
   const rankLabel = getScoreRankLabel(match_score);
 
   return (
     <Box
       sx={{
-        border: '1px solid #e8e0d5',
-        borderRadius: '12px',
-        p: 2.5,
-        bgcolor: '#fff',
+        background: 'linear-gradient(145deg, #1e3a8a 0%, #2d4fd6 60%, #3d64f4 100%)',
+        borderRadius: '14px',
+        p: '22px 24px',
+        color: 'white',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      {/* 섹션 헤더 */}
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-          <AutoAwesomeIcon sx={{ fontSize: '1rem', color: '#888' }} />
-          <Typography sx={{ fontSize: '0.95rem', fontWeight: 700 }}>AI 매칭 분석</Typography>
-        </Box>
-      </Box>
+      {/* 배경 장식 원 */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '-40px',
+          right: '-40px',
+          width: '160px',
+          height: '160px',
+          bgcolor: 'rgba(255,255,255,0.06)',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+        }}
+      />
 
-      {/* 점수 영역 */}
-      <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: 2, mb: 1.5 }}>
-        {/* 큰 점수 */}
-        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.3 }}>
+      {/* 섹션 레이블 */}
+      <Typography
+        sx={{
+          fontSize: '11px',
+          fontWeight: 700,
+          opacity: 0.65,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          mb: 1.75,
+        }}
+      >
+        AI 매칭 분석
+      </Typography>
+
+      {/* 점수 + 순위 배지 */}
+      <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: 1.5, mb: 0.75 }}>
+        <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
           <Typography
-            sx={{
-              fontSize: '3rem',
-              fontWeight: 800,
-              color: scoreColor,
-              lineHeight: 1,
-            }}
+            sx={{ fontSize: '58px', fontWeight: 700, lineHeight: 1, letterSpacing: '-2px' }}
           >
             {scoreInt}
           </Typography>
-          <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: scoreColor }}>점</Typography>
+          <Typography sx={{ fontSize: '15px', opacity: 0.6, pb: 0.75 }}>점</Typography>
         </Box>
-
-        {/* 순위 배지 */}
         {rankLabel && (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 0.4,
-              px: 1,
-              py: 0.4,
-              bgcolor: '#fdf3e0',
-              border: '1px solid #f5c440',
-              borderRadius: '6px',
-              mb: 0.5,
-            }}
-          >
-            <StarIcon sx={{ fontSize: '0.8rem', color: '#f5a623' }} />
-            <Typography sx={{ fontSize: '0.75rem', fontWeight: 700, color: '#b8935a' }}>
+          <Box sx={{ pb: 0.75 }}>
+            <Box
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 0.5,
+                bgcolor: 'rgba(255,255,255,0.18)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                borderRadius: '20px',
+                px: '11px',
+                py: '3px',
+                fontSize: '11px',
+                fontWeight: 700,
+              }}
+            >
+              <StarIcon sx={{ fontSize: '11px' }} />
               {rankLabel}
-            </Typography>
+            </Box>
           </Box>
         )}
       </Box>
 
-      {/* 점수 바 */}
-      <Box sx={{ position: 'relative', mb: 2 }}>
-        <Box
-          sx={{
-            height: '8px',
-            borderRadius: '4px',
-            bgcolor: '#f0ebe3',
-            overflow: 'hidden',
-          }}
-        >
-          <Box
-            sx={{
-              height: '100%',
-              width: `${match_score}%`,
-              borderRadius: '4px',
-              background: `linear-gradient(90deg, ${scoreColor}88, ${scoreColor})`,
-              transition: 'width 0.5s ease',
-            }}
-          />
-        </Box>
-        <Typography sx={{ fontSize: '0.72rem', color: '#aaa', mt: 0.4, textAlign: 'right' }}>
-          기술 스택 매칭 {scoreInt} / 100
-        </Typography>
-      </Box>
-
-      {/* 매칭 요약 */}
+      {/* 진행 바 */}
       <Box
         sx={{
-          bgcolor: '#faf7f2',
-          border: '1px solid #e8e0d5',
-          borderRadius: '8px',
-          p: 1.5,
+          bgcolor: 'rgba(255,255,255,0.2)',
+          borderRadius: '99px',
+          height: '5px',
+          mt: 1.75,
+          mb: 0.5,
         }}
       >
-        <Typography sx={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.65 }}>
+        <Box
+          sx={{
+            bgcolor: 'white',
+            borderRadius: '99px',
+            height: '5px',
+            width: `${match_score}%`,
+          }}
+        />
+      </Box>
+      <Typography
+        sx={{
+          fontSize: '10px',
+          opacity: 0.5,
+          textAlign: 'right',
+          fontFamily: 'monospace',
+          mb: 1.75,
+        }}
+      >
+        기술 스택 매칭 {scoreInt} / 100
+      </Typography>
+
+      {/* AI 코멘트 */}
+      <Box
+        sx={{
+          bgcolor: 'rgba(0,0,0,0.18)',
+          borderRadius: '8px',
+          p: '11px 14px',
+        }}
+      >
+        <Typography sx={{ fontSize: '12px', lineHeight: 1.6, opacity: 0.9 }}>
           {match_summary}
         </Typography>
       </Box>

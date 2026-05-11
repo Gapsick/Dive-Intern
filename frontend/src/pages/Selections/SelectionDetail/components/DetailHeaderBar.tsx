@@ -36,6 +36,8 @@ function DetailHeaderBar({ data, isKo }: Props) {
   const statusStyle = STATUS_STYLE[status] ?? STATUS_STYLE['書類'];
   const logoColor = getLogoColor(companyName);
 
+  const mvv = isKo ? company.mvv_ko : company.mvv_ja;
+
   return (
     <Box>
       {/* 브레드크럼 */}
@@ -61,11 +63,16 @@ function DetailHeaderBar({ data, isKo }: Props) {
         sx={{
           border: '1px solid #e8e0d5',
           borderRadius: '12px',
-          p: 2.5,
           bgcolor: '#fff',
+          overflow: 'hidden',
+        }}
+      >
+      <Box
+        sx={{
           display: 'flex',
           alignItems: 'center',
           gap: 2,
+          p: 2.5,
         }}
       >
         {/* 로고 */}
@@ -173,13 +180,13 @@ function DetailHeaderBar({ data, isKo }: Props) {
             <Typography sx={{ fontSize: '0.8rem', color: '#666' }}>찜</Typography>
           </Box>
 
-          {/* 채용 페이지 버튼 */}
-          {job_posting.recruit_url && (
+          {/* 홈페이지 버튼 */}
+          {company.hp_url && (
             <Button
               variant="contained"
               size="small"
               endIcon={<OpenInNewIcon sx={{ fontSize: '0.85rem !important' }} />}
-              href={job_posting.recruit_url}
+              href={company.hp_url}
               target="_blank"
               rel="noopener noreferrer"
               sx={{
@@ -194,10 +201,45 @@ function DetailHeaderBar({ data, isKo }: Props) {
                 boxShadow: 'none',
               }}
             >
-              채용 페이지
+              홈페이지
             </Button>
           )}
         </Box>
+        </Box>
+
+        {/* MVV 바 */}
+        {mvv && (
+          <Box
+            sx={{
+              borderTop: '1px solid #e3e7f0',
+              bgcolor: '#edf0ff',
+              px: 2.75,
+              py: 1.125,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1.25,
+            }}
+          >
+            <Box
+              sx={{
+                fontSize: '10px',
+                fontWeight: 700,
+                color: '#3d64f4',
+                fontFamily: 'monospace',
+                flexShrink: 0,
+                bgcolor: 'rgba(61,100,244,0.12)',
+                borderRadius: '4px',
+                px: '7px',
+                py: '2px',
+                border: '1px solid rgba(61,100,244,0.18)',
+                lineHeight: 1.5,
+              }}
+            >
+              MVV
+            </Box>
+            <Typography sx={{ fontSize: '13px', fontWeight: 500, color: '#3a4580' }}>{mvv}</Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );

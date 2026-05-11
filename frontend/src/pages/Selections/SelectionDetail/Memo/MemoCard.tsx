@@ -57,20 +57,20 @@ function MemoCard({ memos }: Props) {
             <Box
               key={memo.id}
               sx={{
-                border: '1px solid #f0ebe3',
+                border: '1px solid #c8d7ff',
                 borderRadius: '10px',
                 p: 1.8,
-                bgcolor: '#fdfcfa',
+                bgcolor: '#edf0ff',
                 cursor: 'pointer',
-                '&:hover': { boxShadow: '0 1px 6px rgba(0,0,0,0.08)' },
+                '&:hover': { boxShadow: '0 1px 6px rgba(61,100,244,0.12)' },
               }}
             >
               {/* 제목 + 날짜 */}
               <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 0.6 }}>
-                <Typography sx={{ fontSize: '0.88rem', fontWeight: 700, color: '#333' }}>
+                <Typography sx={{ fontSize: '0.88rem', fontWeight: 700, color: '#1b1e2e' }}>
                   {memo.title}
                 </Typography>
-                <Typography sx={{ fontSize: '0.72rem', color: '#aaa', flexShrink: 0, ml: 1 }}>
+                <Typography sx={{ fontSize: '0.72rem', color: '#7a82a6', flexShrink: 0, ml: 1, fontFamily: 'monospace' }}>
                   {formatDate(memo.created_at)}
                 </Typography>
               </Box>
@@ -78,8 +78,8 @@ function MemoCard({ memos }: Props) {
               <Typography
                 sx={{
                   fontSize: '0.82rem',
-                  color: '#666',
-                  lineHeight: 1.6,
+                  color: '#4a5280',
+                  lineHeight: 1.65,
                   display: '-webkit-box',
                   WebkitLineClamp: 3,
                   WebkitBoxOrient: 'vertical',
@@ -92,24 +92,6 @@ function MemoCard({ memos }: Props) {
           ))}
         </Box>
       )}
-
-      {/* 하단 추가 버튼 */}
-      <Box
-        sx={{
-          mt: 1.5,
-          p: 1,
-          border: '1px dashed #e8e0d5',
-          borderRadius: '8px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          '&:hover': { bgcolor: '#faf7f2' },
-        }}
-      >
-        <AddIcon sx={{ fontSize: '0.9rem', color: '#bbb', mr: 0.5 }} />
-        <Typography sx={{ fontSize: '0.82rem', color: '#bbb' }}>+ 새 메모 추가하기</Typography>
-      </Box>
     </Box>
   );
 }

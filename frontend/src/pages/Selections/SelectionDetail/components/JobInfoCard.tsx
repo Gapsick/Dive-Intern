@@ -3,6 +3,7 @@ import WorkOutlineIcon from '@mui/icons-material/WorkOutlined';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import type { SelectionDetailData } from '@/api/userCompanies';
 
 interface Props {
@@ -56,7 +57,7 @@ function JobInfoCard({ jobPosting, isKo }: Props) {
 
   const salaryLabel =
     jobPosting.salary_min != null && jobPosting.salary_max != null
-      ? `${jobPosting.salary_min.toLocaleString()} ~ ${jobPosting.salary_max.toLocaleString()} ¥`
+      ? ` ¥ ${jobPosting.salary_min.toLocaleString()} ~ ${jobPosting.salary_max.toLocaleString()}`
       : null;
 
   return (
@@ -72,10 +73,21 @@ function JobInfoCard({ jobPosting, isKo }: Props) {
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 2 }}>
         <WorkOutlineIcon sx={{ fontSize: '1rem', color: '#888' }} />
         <Typography sx={{ fontSize: '0.95rem', fontWeight: 700 }}>채용 정보</Typography>
+        {jobPosting.recruit_url && (
+          <Box
+            component="a"
+            href={jobPosting.recruit_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ display: 'flex', alignItems: 'center', color: '#aaa', '&:hover': { color: '#5b8dd9' } }}
+          >
+            <OpenInNewIcon sx={{ fontSize: '0.95rem' }} />
+          </Box>
+        )}
       </Box>
 
       {/* 기본 정보 그리드 */}
-      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, mb: 2 }}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, mb: 2 }}>
         <InfoRow label="포지션">
           <Typography sx={{ fontSize: '0.88rem', fontWeight: 500 }}>{position}</Typography>
         </InfoRow>
@@ -92,6 +104,12 @@ function JobInfoCard({ jobPosting, isKo }: Props) {
         {salaryLabel && (
           <InfoRow label="급여">
             <Typography sx={{ fontSize: '0.88rem', fontWeight: 500 }}>{salaryLabel}</Typography>
+          </InfoRow>
+        )}
+
+        {jobPosting.work_hours && (
+          <InfoRow label="근무시간">
+            <Typography sx={{ fontSize: '0.88rem', fontWeight: 500 }}>{jobPosting.work_hours}</Typography>
           </InfoRow>
         )}
 
