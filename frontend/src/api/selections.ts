@@ -50,14 +50,53 @@ type UpdateSelectionProcessBody = Partial<
   Pick<SelectionProcess, 'stage_type' | 'stage_order' | 'date' | 'result' | 'memo' | 'is_shared'>
 >;
 
+export interface InterviewerInfo {
+  id: string;
+  role: string;
+  count: number;
+  memo: string | null;
+}
+
+export interface QnaItem {
+  id: string;
+  order_index: number;
+  question: string;
+  answer: string;
+  interviewer_id: string | null;
+}
+
+export interface ReverseQnaItem {
+  id: string;
+  order_index: number;
+  reverse_question: string;
+  impression: string | null;
+  interviewer_id: string | null;
+}
+
+export interface InterviewDetailData {
+  selection_process_id: string;
+  user_company_id: string;
+  company_name: string | null;
+  stage_order: number;
+  stage_type: string;
+  date: string | null;
+  result: string | null;
+  memo: string | null;
+  is_shared: boolean;
+  interview_type: string | null;
+  interviewers: InterviewerInfo[];
+  qna_items: QnaItem[];
+  reverse_qna_items: ReverseQnaItem[];
+}
+
 export const selectionsApi = {
   // 학생이 지원한 기업 리스트 + 각 기업별 최신 전형 단계, 다음 일정 정보 등)
   getByStudentId: (studentId: string) =>
     api.get<SelectionItemDto[]>(`/selections/student/${studentId}`),
-
+  // 학생이 지원한 특정 기업의 전형 단계 리스트 조회
   getByUserCompany: (userCompanyId: string) =>
     api.get<SelectionProcess[]>(`/user-companies/${userCompanyId}/selection-processes`),
-
+  // 학생이 지원한 특정 기업의 특정 전형 단계 상세 조회
   getById: (userCompanyId: string, selectionId: string) =>
     api.get<SelectionProcess>(`/user-companies/${userCompanyId}/selection-processes/${selectionId}`),
 
@@ -69,4 +108,8 @@ export const selectionsApi = {
 
   remove: (userCompanyId: string, selectionId: string) =>
     api.delete<void>(`/user-companies/${userCompanyId}/selection-processes/${selectionId}`),
+  
+  // 전형 단계 상세 (면접 상세 정보 등) 조회
+  getInterviewDetail: (stageId: string) =>
+    api.get<InterviewDetailData>(`/selections/${stageId}/interview-detail`),
 };
