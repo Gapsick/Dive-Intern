@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SelectionProcess } from './entities/selection-process.entity';
 import { UserCompany } from '../user-companies/entities/user-company.entity';
+import { InterviewDetail } from './entities/interview-detail.entity';
+import { Interviewer } from './entities/interviewer.entity';
+import { InterviewerQna } from './entities/interviewer-qna.entity';
 import { SelectionItemDto } from './dto/selection-item.dto';
+import { InterviewDetailResponseDto } from './dto/interview-detail.dto';
 
 @Injectable()
 export class SelectionProcessesService {
@@ -12,6 +16,12 @@ export class SelectionProcessesService {
     private readonly selectionProcessRepository: Repository<SelectionProcess>,
     @InjectRepository(UserCompany)
     private readonly userCompanyRepository: Repository<UserCompany>,
+    @InjectRepository(InterviewDetail)
+    private readonly interviewDetailRepo: Repository<InterviewDetail>,
+    @InjectRepository(Interviewer)
+    private readonly interviewerRepo: Repository<Interviewer>,
+    @InjectRepository(InterviewerQna)
+    private readonly interviewerQnaRepo: Repository<InterviewerQna>,
   ) {}
 
   findAll() {
@@ -20,6 +30,95 @@ export class SelectionProcessesService {
 
   findOne(id: string) {
     return this.selectionProcessRepository.findOne({ where: { id } });
+  }
+
+  // 면접 상세 정보 조회 메서드
+  async getInterviewDetail(id: string): Promise<InterviewDetailResponseDto> {
+    // 1. selection_process id 기준으로, 면접 상세 정보 조회
+    // -> user_company_id, 회사명, 전형 단계, 날짜, 결과, 메모 등 포함
+    const process = await this.selectionProcessRepository
+      .createQueryBuilder('sp')
+      .leftJoinAndSelect('sp.user_company', 'uc')
+      .leftJoinAndSelect('uc.job_posting', 'jp')
+      .leftJoinAndSelect('jp.company', 'co')
+      .leftJoinAndSelect('co.translations', 'ct')
+      .where('sp.id = :id', { id })
+      .getOne();
+
+    // 존재하지 않는 전형 단계 id인 경우 404 에러 반환
+    if (!process) {
+      throw new NotFoundException(`SelectionProcess ${id} not found`);
+    }
+
+    const company = process.user_company?.job_posting?.company;
+    const companyName =
+      company?.translations?.find((t) => t.lang === 'ja')?.name ?? null;
+
+    // 2. interview_detail, interviewer, qna 정보는 selection_process id 기준으로 조회
+    // -> 존재여부 체크: interview_detail이 존재하지 않는 경우, 면접 상세 정보가 없다는 의미이므로 404 에러 반환
+    const interviewDetail = await this.interviewDetailRepo.findOne({
+      where: { selection_process: { id } },
+    });
+
+    if (!interviewDetail) {
+      throw new NotFoundException(
+        `InterviewDetail for process ${id} not found`,
+      );
+    }
+
+    const interviewers = await this.interviewerRepo.find({
+      where: { interview_detail: { id: interviewDetail.id } },
+    });
+
+    const allQna = await this.interviewerQnaRepo.find({
+      where: { interview_detail: { id: interviewDetail.id } },
+      relations: ['interviewer'],
+      order: { order_index: 'ASC' },
+    });
+
+    // 4. 조회한 정보들을 InterviewDetailResponseDto 형태로 매핑하여 반환
+    const toDateStr = (d: Date | string | null | undefined): string | null => {
+      if (!d) return null;
+      const date = d instanceof Date ? d : new Date(d);
+      return date.toISOString().split('T')[0];
+    };
+
+    return {
+      selection_process_id: process.id,
+      user_company_id: process.user_company?.id ?? '',
+      company_name: companyName,
+      stage_order: process.stage_order,
+      stage_type: process.stage_type,
+      date: toDateStr(process.date), // 날짜는 'YYYY-MM-DD' 형식의 문자열로 변환
+      result: process.result ?? null,
+      memo: process.memo ?? null,
+      is_shared: process.is_shared,
+      interview_type: interviewDetail.interview_type ?? null,
+      interviewers: interviewers.map((iv) => ({
+        id: iv.id,
+        role: iv.role,
+        count: iv.count,
+        memo: iv.memo ?? null,
+      })),
+      qna_items: allQna
+        .filter((q) => q.question != null)
+        .map((q) => ({
+          id: q.id,
+          order_index: q.order_index,
+          question: q.question,
+          answer: q.answer,
+          interviewer_id: q.interviewer?.id ?? null,
+        })),
+      reverse_qna_items: allQna
+        .filter((q) => q.reverse_question != null)
+        .map((q) => ({
+          id: q.id,
+          order_index: q.order_index,
+          reverse_question: q.reverse_question,
+          impression: q.impression ?? null,
+          interviewer_id: q.interviewer?.id ?? null,
+        })),
+    };
   }
 
   // 학생의 지원 기업 리스트 + 각 기업별 최신 전형 단계, 
@@ -106,8 +205,8 @@ export class SelectionProcessesService {
          GROUP BY user_company_id
        ) latest ON sp.user_company_id = latest.user_company_id
          AND sp.stage_order = latest.max_order`,
-      ucIds,
-    );
+        ucIds,
+      );
     const stageMap = new Map<string, string>();
     for (const { user_company_id, stage_type } of spBulk) {
       stageMap.set(user_company_id, stage_type);

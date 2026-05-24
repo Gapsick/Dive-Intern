@@ -3,7 +3,9 @@ import { SelectionProcessesService } from './selection-processes.service';
 
 @Controller('selections')
 export class SelectionProcessesController {
-  constructor(private readonly selectionProcessesService: SelectionProcessesService) {}
+  constructor(
+    private readonly selectionProcessesService: SelectionProcessesService,
+  ) {}
 
   @Get()
   findAll() {
@@ -15,6 +17,11 @@ export class SelectionProcessesController {
   @Get('student/:studentId')
   findByStudentId(@Param('studentId') studentId: string) {
     return this.selectionProcessesService.findByStudentId(studentId);
+  }
+
+  @Get(':id/interview-detail')
+  getInterviewDetail(@Param('id') id: string) {
+    return this.selectionProcessesService.getInterviewDetail(id);
   }
 
   @Get(':id')
